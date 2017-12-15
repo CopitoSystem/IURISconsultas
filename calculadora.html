@@ -266,8 +266,10 @@
     salario = document.getElementsByName('salario')[0].value;
     
     // Calculos
-
-    
+    antiguedad_anos = antiguedad_anos(ingreso, salida);
+    antiguedad_dias = antiguedad_dias(ingreso, salida);
+    //antiguedad_art_245(antiguedad_anos(ingreso,salida),salario);
+    alert(sustitutiva_de_preaviso(antiguedad_dias, salario)); 
 
 
 
@@ -275,6 +277,44 @@
     $(window).scrollTop(200);
     console.log(salario);
 })
+
+  function antiguedad_dias(d1, d2) {
+    d1 = new Date(d1);
+    d2 = new Date(d2);
+    var timeDiff = Math.abs(d2.getTime() - d1.getTime());
+    var diffDays = Math.round(timeDiff / (1000 * 3600 * 24)); 
+    //alert(diffDays);
+    return(diffDays);
+  }
+
+  function antiguedad_anos(d1, d2) {
+    //antiguedad [años] (si es mayor a 6 meses es 1 año)
+    d1 = new Date(d1);
+    d2 = new Date(d2);
+    var timeDiff = Math.abs(d2.getTime() - d1.getTime());
+    var diffDays = Math.round(timeDiff / (1000 * 3600 * 24 * 365)); 
+    //alert(diffDays);
+    return(diffDays);
+  }
+
+  function antiguedad_art_245(salario, ant_anos) {
+    alert(Math.round(salario * ant_anos));
+    return (Math.round(salario * ant_anos));
+  }
+
+  function sustitutiva_de_preaviso(antiguedad_dias, salario) {
+        /*pago de lo que le hubiese correspondido cobrar al trabajador en el mes o en los meses de preaviso
+        Quince días de anticipación para trabajadores que se encuentren en el período de prueba (ver explicación debajo)
+        Un mes de anticipación para trabajadores con menos de 5 años de antigüedad
+        Dos meses para trabajadores con antigüedad mayor a 5 años*/
+        if (antiguedad_dias <= 90) {
+            return Math.round((salario / 30) * 15)
+        } else if (90 < antiguedad_dias & antiguedad_dias <= 365 * 5) {
+            return Math.round(salario)
+        } else {
+            return Math.round(salario * 2)
+        }
+    }
 
 </script>
 
