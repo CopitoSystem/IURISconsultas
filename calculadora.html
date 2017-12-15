@@ -258,8 +258,21 @@
   $('form').submit(false);
   $('#botonVioleta').on('click', function(e) {
 
+    causa = document.getElementsByName('causa_despido')[0].value;
+    preaviso = document.getElementsByName('preaviso')[0].value;
+    ingreso = document.getElementsByName('ingreso')[0].value;
+    salida = document.getElementsByName('salida')[0].value;
+    salario = document.getElementsByName('salario')[0].value;
+    
+    // Calculos
+
+    
+
+
+
     $('#indemnizacion').css('display', '');
     $(window).scrollTop(200);
+    console.log(salario);
 })
 
 </script>
