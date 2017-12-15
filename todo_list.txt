@@ -1,0 +1,17 @@
+TODO LIST
+
+1) agregar captcha a contacto
+2) mejorar logo
+3) el formulario de calculadora se ve vacio
+4) hacer una pagina de facebook para responder los comentarios
+5) pagina error 404 ej: https://www.argentina.gob.ar/j
+6) darle permisos a google sheet
+
+
+
+######## EXPERIMENTAL ########
+1) guardar una copia de los datos de la calculadora y la ip de los usuarios
+2) crear cookie para personalizar la experiencia (ej: cartel de cuanto tiempo tienen para reclamar)
+3) comprobante de calculadora en pdf para descuento
+4) guardar ip de los que envian mensajes para limitar spam
+
