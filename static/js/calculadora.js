@@ -6,10 +6,18 @@
 
     // Valores tomados de los input
     causa = parseInt(document.getElementsByName('causa_despido')[0].value);
-    preaviso = (document.getElementsByName('preaviso')[0].value == "true");
     ingreso = document.getElementsByName('ingreso')[0].value;
     salida = document.getElementsByName('salida')[0].value;
     salario = parseInt(document.getElementsByName('salario')[0].value);
+    var rates = document.getElementsByName('preaviso');
+    var preaviso;
+    for(var i = 0; i < rates.length; i++){
+      if(rates[i].checked){
+        preaviso = parseInt(rates[i].value);
+      }
+    }
+    preaviso = (preaviso == 1);
+    
     
     // Calculos
     ant_anos = antiguedad_anos(ingreso, salida);
@@ -208,7 +216,7 @@
       //hubo preaviso?
       if (preaviso == true) {
         total = Math.round(ant_art_245 + dias_trabaj_del_mes + integra_mes_de_despido + sac_propor + vaca_no_gozadas + sac_vaca_no_gozadas);
-        return([salario, ant_anos, ant_art_245, "0", "0",dias_trabaj_del_mes, integra_mes_de_despido, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
+        return([salario, ant_anos, ant_art_245, "0", "0", dias_trabaj_del_mes, integra_mes_de_despido, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
       } else {
         total = Math.round(ant_art_245 + sust_de_preaviso + sac_preav + dias_trabaj_del_mes + integra_mes_de_despido + sac_propor + vaca_no_gozadas + sac_vaca_no_gozadas);
         return([salario, ant_anos, ant_art_245, sust_de_preaviso, sac_preav, dias_trabaj_del_mes, integra_mes_de_despido, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
