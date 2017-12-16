@@ -258,6 +258,9 @@
   $('form').submit(false);
   $('#botonVioleta').on('click', function(e) {
 
+    $('#indemnizacion').css('display', 'none');
+
+    // Valores tomados de los input
     causa = parseInt(document.getElementsByName('causa_despido')[0].value);
     preaviso = (document.getElementsByName('preaviso')[0].value == "true");
     ingreso = document.getElementsByName('ingreso')[0].value;
@@ -265,20 +268,21 @@
     salario = parseInt(document.getElementsByName('salario')[0].value);
     
     // Calculos
-    antiguedad_anos = antiguedad_anos(ingreso, salida);
-    antiguedad_dias = antiguedad_dias(ingreso, salida);
-    antiguedad_art_245 = antiguedad_art_245(antiguedad_anos,salario);
-    sustitutiva_de_preaviso = sustitutiva_de_preaviso(salario, antiguedad_dias);
-    sac_preaviso = sac_preaviso(sustitutiva_de_preaviso);
-    dias_trabajados_del_mes = dias_trabajados_del_mes(salario, salida);
-    dias_hasta_fin_de_mes = dias_hasta_fin_de_mes(salida);
-    integracion_mes_de_despido = integracion_mes_de_despido(salario,salida,dias_hasta_fin_de_mes);
-    dias_desde_comienzo_semetre = dias_desde_comienzo_semetre(ingreso, salida, antiguedad_dias);
-    sac_integracion_mes_de_despido = sac_integracion_mes_de_despido(integracion_mes_de_despido);
-    sac_proporcional = sac_proporcional(salario, dias_desde_comienzo_semetre);
-    vacaciones_no_gozadas = vacaciones_no_gozadas(salario, antiguedad_dias, antiguedad_anos);
-    sac_vacaciones_no_gozadas = sac_vacaciones_no_gozadas(salario, antiguedad_dias, antiguedad_anos);
-    reporte = generar_reporte(causa, preaviso, salario, ingreso, salida, antiguedad_art_245, dias_trabajados_del_mes, sac_integracion_mes_de_despido, sac_proporcional, vacaciones_no_gozadas, sac_vacaciones_no_gozadas);
+    ant_anos = antiguedad_anos(ingreso, salida);
+    ant_dias = antiguedad_dias(ingreso, salida);
+    ant_art_245 = antiguedad_art_245(ant_anos,salario);
+    sust_de_preaviso = sustitutiva_de_preaviso(salario, ant_dias);
+    sac_preav = sac_preaviso(sust_de_preaviso);
+    dias_trabaj_del_mes = dias_trabajados_del_mes(salario, salida);
+    dias_hasta_fin_mes = dias_hasta_fin_de_mes(salida);
+    integra_mes_de_despido = integracion_mes_de_despido(salario, salida, dias_hasta_fin_mes);
+    dias_desde_comien_semetre = dias_desde_comienzo_semetre(ingreso, salida, ant_dias);
+    sac_integra_mes_de_despido = sac_integracion_mes_de_despido(integra_mes_de_despido);
+    sac_propor = sac_proporcional(salario, dias_desde_comien_semetre);
+    vaca_no_gozadas = vacaciones_no_gozadas(salario, ant_dias, ant_anos);
+    sac_vaca_no_gozadas = sac_vacaciones_no_gozadas(vaca_no_gozadas);
+    reporte = generar_reporte(causa, preaviso, salario, ant_dias, ant_anos, ant_art_245, dias_trabaj_del_mes, sust_de_preaviso, sac_preav, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas);
+    console.log([causa, preaviso, salario, ant_dias, ant_anos, ant_art_245, dias_trabaj_del_mes, sust_de_preaviso, sac_preav, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas]);
 
 
     $("#salario").html("$ " + reporte[0]);
@@ -439,7 +443,7 @@
       return Math.round((salario / 25) * Math.round((antiguedad_dias % 365) / (365 / 14)));
     }
     else if (antiguedad_anos <= 10) {
-      return math.round((salario / 25) * Math.round((antiguedad_dias % 365) / (365 / 21)));
+      return Math.round((salario / 25) * Math.round((antiguedad_dias % 365) / (365 / 21)));
     }
     else if (antiguedad_anos <= 20) {
       return Math.round((salario / 25) * Math.round((antiguedad_dias % 365) / (365 / 28)));
@@ -449,26 +453,26 @@
     }
   }
 
-  function sac_vacaciones_no_gozadas(vacaciones_no_gozadas) {
+  function sac_vacaciones_no_gozadas(vaca_no_gozadas) {
     /*SAC Vacaciones No Gozadas = Vacaciones Proporcionales no Gozadas /12*/
-    return Math.round(vacaciones_no_gozadas / 12);
+    return Math.round(vaca_no_gozadas / 12);
   }
 
-  function generar_reporte(causa, preaviso, salario, ingreso, salida, antiguedad_art_245, dias_trabajados_del_mes, sac_integracion_mes_de_despido, sac_proporcional, vacaciones_no_gozadas, sac_vacaciones_no_gozadas) {
+  function generar_reporte(causa, preaviso, salario, ant_dias, ant_anos, ant_art_245, dias_trabaj_del_mes, sust_de_preaviso, sac_preav, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas) {
     //despido sin causa
-    if (causa == 1 & antiguedad_dias > 90) {
+    if (causa == 1 & ant_dias > 90) {
       //hubo preaviso?
       if (preaviso == true) {
-        total = Math.round(antiguedad_art_245 + dias_trabajados_del_mes + integracion_mes_de_despido + sac_proporcional + vacaciones_no_gozadas + sac_vacaciones_no_gozadas());
-        return([salario, antiguedad_anos, antiguedad_art_245, "0", "0",dias_trabajados_del_mes, integracion_mes_de_despido, sac_integracion_mes_de_despido, sac_proporcional, vacaciones_no_gozadas, sac_vacaciones_no_gozadas, total]);
+        total = Math.round(ant_art_245 + dias_trabaj_del_mes + integra_mes_de_despido + sac_propor + vaca_no_gozadas + sac_vaca_no_gozadas);
+        return([salario, ant_anos, ant_art_245, "0", "0",dias_trabaj_del_mes, integra_mes_de_despido, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
       } else {
-        total = Math.round( antiguedad_art_245 + sustitutiva_de_preaviso + sac_preaviso + dias_trabajados_del_mes + integracion_mes_de_despido + sac_proporcional + vacaciones_no_gozadas + sac_vacaciones_no_gozadas);
-        return([salario, antiguedad_anos, antiguedad_art_245, sustitutiva_de_preaviso, sac_preaviso, dias_trabajados_del_mes, integracion_mes_de_despido,self.sac_integracion_mes_de_despido, sac_proporcional, vacaciones_no_gozadas, sac_vacaciones_no_gozadas, total]);
+        total = Math.round(ant_art_245 + sust_de_preaviso + sac_preav + dias_trabaj_del_mes + integra_mes_de_despido + sac_propor + vaca_no_gozadas + sac_vaca_no_gozadas);
+        return([salario, ant_anos, ant_art_245, sust_de_preaviso, sac_preav, dias_trabaj_del_mes, integra_mes_de_despido, sac_integra_mes_de_despido, sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
       }
     //despido con causa o renuncia
-    } else if (causa == 2 | causa ==3 | antiguedad_dias <= 90) {
-        total = Math.round( dias_trabajados_del_mes + sac_proporcional + vacaciones_no_gozadas + sac_vacaciones_no_gozadas);
-        return([salario, antiguedad_anos,"0", "0", "0", dias_trabajados_del_mes, "0", "0", sac_proporcional, vacaciones_no_gozadas, sac_vacaciones_no_gozadas, total]);
+    } else if (causa == 2 | causa == 3 | antiguedad_dias <= 90) {
+        total = Math.round(dias_trabaj_del_mes + sac_propor + vaca_no_gozadas + sac_vaca_no_gozadas);
+        return([salario, ant_anos,"0", "0", "0", dias_trabaj_del_mes, "0", "0", sac_propor, vaca_no_gozadas, sac_vaca_no_gozadas, total]);
     }
   }
 
