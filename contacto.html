@@ -115,9 +115,9 @@
             </form>
           </div>
         </section>
-            <script type="text/javascript">var $form = $('form#test-form'),
-
-    url = 'https://script.google.com/macros/s/AKfycbxwVHG6TGQPAGZF2LkTGDS8FMZBZOgOkM_6vvpFwCuEocKvgE8/exec'
+            <script type="text/javascript">
+              var $form = $('form#test-form'),
+ url = ""
 
 $.fn.serializeObject = function()
 {
@@ -138,6 +138,17 @@ $.fn.serializeObject = function()
 
 $('#botonVioleta').on('click', function(e) {
 
+  nombre = document.getElementsByName('Nombre')[0].value;
+  msj = document.getElementsByName('Mensaje')[0].value;
+  if (nombre != "" & msj != "") {
+    notificacion = "Mensaje enviado.";
+    url = 'https://script.google.com/macros/s/AKfycbxwVHG6TGQPAGZF2LkTGDS8FMZBZOgOkM_6vvpFwCuEocKvgE8/exec';
+  } else {
+    notificacion = "Falló el envio. Completá todos los campos.";
+    url = '';
+  }
+  
+
   e.preventDefault();
 
   var jqxhr = $.ajax({
@@ -151,9 +162,9 @@ $('#botonVioleta').on('click', function(e) {
     data: $form.serializeObject()
 
   }).success(
-	// do something
-    console.log("enviado"),
-    alert("Mensaje enviado"),
+  // do something
+    //console.log("enviado"),
+    alert(notificacion),
     $('#test-form')[0].reset()
 
   );
