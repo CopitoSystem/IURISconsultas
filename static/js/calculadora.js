@@ -38,7 +38,7 @@
 
 
     $("#salario").html("$ " + reporte[0]);
-    $("#antiguedad_anos").html(reporte[1]);
+    $("#antiguedad_anos").html(reporte[1] + " años");
     $("#antiguedad_art_245").html("$ " + reporte[2]);
     $("#sustitutiva_de_preaviso").html("$ " + reporte[3]);
     $("#sac_preaviso").html("$ " + reporte[4]);
